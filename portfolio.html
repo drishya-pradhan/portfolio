@@ -51,14 +51,14 @@
             </div>
             <div class="about-content">
                 <h2 class="heading"> About <span class="type">Me</span></h2>
-                <h3>Second-year Computer Science Student at Miami University </h3>
-                <p>I am a second-year student at Miami University, pursuing a bachelor's degree of Science in Computer Science 
+                <h3>Computer Science Student at Miami University </h3>
+                <p>I am a third-year student at Miami University, pursuing a bachelor's degree of Science in Computer Science 
                 with a keen interest in the software development field. <span id="dots">...</span><span id="more" class = "type">
-                 Eager to delve deeper into technology, I am activelytrying to hone my skills through coursework and 
+                Eager to delve deeper into technology, I am actively trying to hone my skills through coursework and 
                 personal projects. a passion for problem-solving and a drive to innovate, I am dedicated to learning and 
                 expanding my knowledge in all areas. Through continuous learning and hands-on projects, I am determined to make 
                 meaningful contribution to the ever-evolving world of tech.
-                 Outside of academics, I am actively engaged in personal projects that aim to improve and enhance my proficiency 
+                Outside of academics, I am actively engaged in personal projects that aim to improve and enhance my proficiency 
                 in software development. These projects act as testing grounds for my creativity and problem-solving skill, allowing
                 me to apply my knowledge from classes to practical scenarios. With a positive mindset and commitment to continuous 
                 learning, I am ready to apply my education and experiences to make an impact in the world of software development.</span></p>
@@ -133,18 +133,15 @@
         <!-- contact section design-->
         <section class="contact" id="contact">
         <h2 class="heading">Contact <span class="type">Me!</span></h2>
-        <form id="fcf-form-id" class="fcf-form-class" method="post">
+        <form name="submit-to-google-sheet">
             <div class="input-box">
                 <input type="text" name="Name" placeholder="Full Name">
                 <input type="email" name="Email" placeholder="Email Address">
             </div>
-            <div class="input-box">
-                <input type="number" placeholder="Phone Number">
-                <input type="text" placeholder="Email Subject">
-            </div>
             <textarea name="Message" id="" cols="30" rows="10" placeholder="Your Message"></textarea>
             <input type="submit" value="Send Message" class="btn">
-        </form>
+            <span id="msg"></span>
+        </form> 
     </section>
     <!-- footer design -->
     <div class="footer-text">
@@ -156,62 +153,48 @@
     <!--script import for typing effect-->
     <script src="https://cdn.jsdelivr.net/npm/typeit@8.7.0/dist/index.umd.js"></script>
     <script>
-    function readmore() {
-        var dots = document.getElementById("dots");
-        var moreText = document.getElementById("more");
-        var btnText = document.getElementById("mybtn");
+        function readmore() {
+            var dots = document.getElementById("dots");
+            var moreText = document.getElementById("more");
+            var btnText = document.getElementById("mybtn");
 
-        if (dots.style.display === "none") {
-            dots.style.display = "inline";
-            btnText.innerHTML = "Read more";
-            moreText.style.display = "none";
-        } else {
-            dots.style.display = "none";
-            btnText.innerHTML = "Read less";
-            moreText.style.display = "inline";
+            if (dots.style.display === "none") {
+                dots.style.display = "inline";
+                btnText.innerHTML = "Read more";
+                moreText.style.display = "none";
+            } else {
+                dots.style.display = "none";
+                btnText.innerHTML = "Read less";
+                moreText.style.display = "inline";
+            }
         }
-    }
 
-  const typedTextElements = document.querySelectorAll('.type');
+        const typedTextElements = document.querySelectorAll('.type');
 
-  typedTextElements.forEach((element, index) => {
-    new TypeIt(element)
-      
-      .pause(1000)
-      .go();
-    
-  });
+        typedTextElements.forEach((element, index) => {
+        new TypeIt(element)
+            .pause(1000)
+            .go();
+        
+        });
     </script>
-
-   
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyL7T4x1RmeoMeY1P_uMczVuem0AtgDnvrg1ZJxj2jiKy2kXmXzbbgM6BVy7yO0MspCKQ/exec'
+        const form = document.forms['submit-to-google-sheet']
+        const msg = document.getElementById("msg")
+        form.addEventListener('submit', e => {
+            e.preventDefault()
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    msg.innerHTML = "Message Sent Successfully!"
+                    setTimeout(function(){ 
+                        msg.innerHTML = ""
+                    },5000)
+                    form.reset()
+                })
+                .catch(error => console.error('Error!', error.message))
+        })
+    </script>
 </body>
 
-<?php
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["Name"];
-    $email = $_POST["Email"];
-    $phoneNumber = $_POST["PhoneNumber"];
-    $subject = $_POST["Subject"];
-    $message = $_POST["Message"];
-
-    $to = "drishyapradhan2003@gmail.com";
-    $subject = "Contact Form Submission - " . $subject;
-    $email_body = "
-        Name: $name\n
-        Email: $email\n
-        Phone Number: $phoneNumber\n
-        Message: $message\n
-    ";
-
-    $headers = "From: $email\r\n";
-
-    // Send email
-    if (mail($to, $subject, $email_body, $headers)) {
-        echo "Email sent successfully!";
-    } else {
-        echo "Failed to send email. Please try again.";
-    }
-}
-?>
 </html>

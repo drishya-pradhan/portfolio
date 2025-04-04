@@ -311,3 +311,8 @@ span {
     font-size: 1.6rem;
     margin-bottom: 0.5rem;
 }
+#msg{ 
+    color: #b592ee;
+    margin-top: 2rem;
+    display: block;
+}
